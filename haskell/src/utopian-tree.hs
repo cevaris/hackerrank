@@ -54,10 +54,36 @@
 sum2 :: (Integer, Integer) -> Integer
 sum2 (x,y) = x + y
 
+trim :: String -> String
+trim = unwords . words
+
+
+parseInt :: String -> Integer
+parseInt = do
+    let cleanLine = trim ( line )
+    if ( cleanLine /= [] )
+        then return read cleanLine
+        else return -1
+
+grabHeight :: () -> Integer
+grabHeight = do
+    line <- getLine
+    return parseInt line
+    
+
+
+
 main = do
-    left  <- getLine
-    right <- getLine
-    let left'  = read left
-        right' = read right
-        sum    = sum2 (left',right')
-    print sum
+    numOfTestCases <- getLine
+
+
+
+
+
+
+
+
+
+
+
+
