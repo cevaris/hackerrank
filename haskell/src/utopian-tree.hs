@@ -54,17 +54,18 @@ tree _ height 0 = height
 tree 'M' height cycle = tree 'S' (height+1) (cycle-1)
 tree 'S' height cycle = tree 'M' (height*2) (cycle-1)
 
---grabInitHeight :: Integer -> Integer
-utopia 0 = exitSuccess
+
+utopia :: Integer -> [Integer]
+utopia 0 = []
 utopia testCount = do
                     line <- getLine
-                    print (tree 'S' 1 (read line :: Integer))
+                    --print (tree 'S' 1 (read line :: Integer))
                     utopia (testCount-1)
 
 
 main = do
     testCount <- getLine
-    utopia (read testCount :: Integer)
+    print (utopia (read testCount :: Integer))
 
 
 
