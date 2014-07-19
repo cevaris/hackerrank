@@ -1,4 +1,5 @@
 #!/usr/bin/env runhaskell
+import System.Exit
 
 --The Utopian tree goes through 2 cycles of growth every year. The first growth cycle of the tree occurs during the monsoon, when it doubles in height. The second growth cycle of the tree occurs during the summer, when its height increases by 1 meter.
 --Now, a new Utopian tree sapling is planted at the onset of the monsoon. Its height is 1 meter. Can you find the height of the tree after N growth cycles?
@@ -49,32 +50,22 @@
 --N = 4:
 --the height of the tree at the end of the 4th cycle = 7
 
+tree "M" height = tree 
+tree "S" height
 
-
-sum2 :: (Integer, Integer) -> Integer
-sum2 (x,y) = x + y
-
-trim :: String -> String
-trim = unwords . words
-
-
-parseInt :: String -> Integer
-parseInt = do
-    let cleanLine = trim ( line )
-    if ( cleanLine /= [] )
-        then return read cleanLine
-        else return -1
-
-grabHeight :: () -> Integer
-grabHeight = do
-    line <- getLine
-    return parseInt line
-    
-
+--grabInitHeight :: Integer -> Integer
+utopia 0 = exitSuccess
+utopia testCount = do
+                    line <- getLine
+                    print line
+                    utopia (testCount-1)
 
 
 main = do
-    numOfTestCases <- getLine
+    testCount <- getLine
+    utopia (read testCount :: Integer)
+
+
 
 
 
