@@ -1,7 +1,5 @@
 #!/usr/bin/env runhaskell
 import Control.Monad
-import Control.Monad.Trans
-import System.Exit
 
 --The Utopian tree goes through 2 cycles of growth every year. The first growth cycle of the tree occurs during the monsoon, when it doubles in height. The second growth cycle of the tree occurs during the summer, when its height increases by 1 meter.
 --Now, a new Utopian tree sapling is planted at the onset of the monsoon. Its height is 1 meter. Can you find the height of the tree after N growth cycles?
@@ -70,9 +68,9 @@ get2Lines = do
 
 
 --readInt :: () -> Integer
---readInt = do
---        line <- getLine
---        return (read line :: Integer)
+readInt = do
+        line <- getLine
+        return (read line :: Integer)
 
 --readTests :: Integer -> [String] -> [String]
 --readTests 0 xs = xs
@@ -88,17 +86,27 @@ get2Lines = do
 --                    else do s <- readLines
 --                            return (c:s)
 
-readInts :: IO [Integer]
-readInts = do   c <- getLine
-                if c == "" 
-                    then return []
-                    else do s <- readInts
-                            return ((read c :: Integer):s)
+--readInts :: IO [Integer]
+--readInts = do   c <- getLine
+--                if c == "" 
+--                    then return []
+--                    else do s <- readInts
+--                            return ((read c :: Integer):s)
+
+--readInts :: Integer -> Integer
+--readInts 0 = []
+--readInts x = do
+--            c <- getLine
+--            s <- readInts (x-1)
+--            return ((read c :: Integer):s)
 
 
 main = do
     testCount <- getLine
-    return ()
+    inputs <- replicateM (read testCount) readInt
+    print inputs
+    --hieghts <- readInts
+    --print hieghts
     --lines <- readLines
     --let hieghts = readTests (read testCount :: Integer) []
     --return hieghts
