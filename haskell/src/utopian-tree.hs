@@ -68,15 +68,41 @@ get2Lines = do
     line2 <- getLine
     return ((read line1 :: Integer),(read line2:: Integer))
 
-readTests :: Integer -> [String] -> [String]
-readTests 0 xs = xs
-readTests testCount xs = do 
-                    readTests (testCount-1) ((lift getLine):xs)
+
+--readInt :: () -> Integer
+--readInt = do
+--        line <- getLine
+--        return (read line :: Integer)
+
+--readTests :: Integer -> [String] -> [String]
+--readTests 0 xs = xs
+--readTests testCount xs = do 
+--                    readTests (testCount-1) ((lift getLine):xs)
+
+
+
+--readLines :: IO [String]
+--readLines = do  c <- getLine
+--                if c == "" 
+--                    then return []
+--                    else do s <- readLines
+--                            return (c:s)
+
+readInts :: IO [Integer]
+readInts = do   c <- getLine
+                if c == "" 
+                    then return []
+                    else do s <- readInts
+                            return ((read c :: Integer):s)
+
 
 main = do
     testCount <- getLine
-    hieghts <- readTests (read testCount :: Integer) []
-    print 32
+    return ()
+    --lines <- readLines
+    --let hieghts = readTests (read testCount :: Integer) []
+    --return hieghts
+    --print 32
     --print x
     --let testCount' = (read testCount :: Integer)
     --    tests = readTests testCount'  []
