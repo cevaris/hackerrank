@@ -1,4 +1,6 @@
 #!/usr/bin/env runhaskell
+import Control.Monad
+import Control.Monad.Trans
 import System.Exit
 
 --The Utopian tree goes through 2 cycles of growth every year. The first growth cycle of the tree occurs during the monsoon, when it doubles in height. The second growth cycle of the tree occurs during the summer, when its height increases by 1 meter.
@@ -54,34 +56,32 @@ tree _ height 0 = height
 tree 'M' height cycle = tree 'S' (height+1) (cycle-1)
 tree 'S' height cycle = tree 'M' (height*2) (cycle-1)
 
---utopia :: Integer -> [Integer] -> [Integer]
+--utopia :: Integer -> [Integer] -> [Integer] -> IO ()
 --utopia 0 x = x
 --utopia testCount x = do
 --                    line <- getLine
 --                    print (tree 'S' 1 (read line :: Integer))
 --                    utopia (testCount-1) x
 
---getUserLines :: IO String                      -- optional type signature
---getUserLines = go ""
---  where go contents = do
---    line <- getLine
---    if line == "q"
---        then return contents
---        else go (contents ++ line ++ "\n")
+get2Lines = do
+    line1 <- getLine
+    line2 <- getLine
+    return ((read line1 :: Integer),(read line2:: Integer))
 
-main = go ""
-    where go contents = do
-        line <- getLine
-        if line == "q"
-            then return contents
-            else go (contents ++ line ++ "\n")
-    --testCount <- getLine
-    --where
-    --    utopia testCount x = do
-    --                        line <- getLine
-    --                        --print (tree 'S' 1 (read line :: Integer))
-    --                        utopia (testCount-1) x
+readTests :: Integer -> [String] -> [String]
+readTests 0 xs = xs
+readTests testCount xs = do 
+                    readTests (testCount-1) ((lift getLine):xs)
 
+main = do
+    testCount <- getLine
+    hieghts <- readTests (read testCount :: Integer) []
+    print 32
+    --print x
+    --let testCount' = (read testCount :: Integer)
+    --    tests = readTests testCount'  []
+    --print 10
+    --utopia (read testCount :: Integer) []
 
 
 
