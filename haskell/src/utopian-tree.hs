@@ -1,5 +1,4 @@
 #!/usr/bin/env runhaskell
-import Control.Monad
 
 --The Utopian tree goes through 2 cycles of growth every year. The first growth cycle of the tree occurs during the monsoon, when it doubles in height. The second growth cycle of the tree occurs during the summer, when its height increases by 1 meter.
 --Now, a new Utopian tree sapling is planted at the onset of the monsoon. Its height is 1 meter. Can you find the height of the tree after N growth cycles?
@@ -50,30 +49,22 @@ import Control.Monad
 --N = 4:
 --the height of the tree at the end of the 4th cycle = 7
 
+import Control.Monad
 
 tree :: Char -> Integer -> Integer -> Integer
 tree _ height 0 = height
 tree 'M' height cycle = tree 'S' (height+1) (cycle-1)
 tree 'S' height cycle = tree 'M' (height*2) (cycle-1)
 
-get2Lines = do
-    line1 <- getLine
-    line2 <- getLine
-    return ((read line1 :: Integer),(read line2:: Integer))
-
-
 readInt :: IO Integer
 readInt = do
         line <- getLine
         return (read line :: Integer)
 
-
-
 main = do
     testCount <- getLine
     cycles <- replicateM (read testCount) readInt
-    let x = [ (tree 'S' 1 c) | c <- cycles] 
-    print x
+    mapM_ print ([ (tree 'S' 1 c) | c <- cycles])
 
 
 
