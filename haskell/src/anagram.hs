@@ -54,7 +54,57 @@ and both strings are anagrams.So number of changes required = 0.
 -}
 
 
+import Control.Monad
+import Data.Map
+import Data.List.Split 
 
+{-
+1
+aaabbb
+
+(Sample "test" "test")
+-}
+
+-- Sample
+
+data Sample =   Sample [Char] [Char]
+                deriving Show
+
+isEvenLen :: [Char] -> Bool
+isEvenLen s = (length s) `mod` 2 == 0
+
+sample :: [Char] -> Sample
+sample s =  let x = chunksOf ((length s) `div` 2) s
+            in  if length x == 2
+                then (Sample (x !! 0) (x !! 1))
+                else error "Not valid sample"
+
+validate s = if isEvenLen s
+            then processs (sample s)
+            else -1
+
+
+
+
+-- Anagrams
+
+--freq s = map (\x -> (head x, length x)) $ group $ sort "happy"
+freqList :: [Char] -> [(Char, Integer)]
+freqList s = toList $ fromListWith (+) [(c, 1) | c <- s]
+
+isAnagram :: [Char] -> [Char] -> Bool
+isAnagram a b = (freqList a) == (freqList b)
+
+
+
+-- Process
+
+processs (Sample l r) = if isAnagram l r
+                        then 0
+                        else 100
 
 main = do
-    print "TEst"
+    testCount <- getLine
+    samples <- replicateM (read testCount) getLine
+    mapM_ print ([ validate s | s <- samples])
+    --mapM_ print ([ (tree 'S' 1 c) | c <- cycles])
