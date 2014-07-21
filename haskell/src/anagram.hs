@@ -57,6 +57,7 @@ and both strings are anagrams.So number of changes required = 0.
 import Control.Monad
 import Data.Map
 import Data.List.Split 
+import Debug.Trace
 
 {-
 1
@@ -80,11 +81,19 @@ sample s =  let x = chunksOf ((length s) `div` 2) s
                 else error "Not valid sample"
 
 validate s = if isEvenLen s
-            then processs (sample s)
-            else -1
+             then processs (sample s)
+             else -1
 
+processs (Sample l r) = if isAnagram l r
+                        then 0
+                        else calcMinToAna l r 0
 
-
+-- | trace ("test " ++ xs ++ " " ++ ys ++ " " ++ show acc) True
+calcMinToAna :: [Char] -> [Char] -> Integer -> Integer
+calcMinToAna [] [] acc = acc
+calcMinToAna (x:xs) (y:ys) acc = if x == y
+                                 then calcMinToAna xs ys acc
+                                 else calcMinToAna (x:xs) (x:ys) (acc+1)
 
 -- Anagrams
 
@@ -99,12 +108,8 @@ isAnagram a b = (freqList a) == (freqList b)
 
 -- Process
 
-processs (Sample l r) = if isAnagram l r
-                        then 0
-                        else 100
 
 main = do
     testCount <- getLine
     samples <- replicateM (read testCount) getLine
     mapM_ print ([ validate s | s <- samples])
-    --mapM_ print ([ (tree 'S' 1 c) | c <- cycles])
