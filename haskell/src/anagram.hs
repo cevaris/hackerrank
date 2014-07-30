@@ -68,8 +68,8 @@ aaabbb
 
 -- Sample
 
-data Sample =   Sample [Char] [Char]
-                deriving Show
+data Sample = Sample [Char] [Char]
+              deriving Show
 
 isEvenLen :: [Char] -> Bool
 isEvenLen s = (length s) `mod` 2 == 0
