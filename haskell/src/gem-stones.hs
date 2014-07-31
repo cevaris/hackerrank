@@ -38,30 +38,27 @@ import Control.Monad
 import Debug.Trace
 import Data.List
 
-
-process s = let (source, samples) = sampleGemStone $ map dedup s
-            in countGemStones source samples
+process s = countGemStones $ map dedup s
 
 dedup :: (Ord a, Eq a) => [a] -> [a]
 dedup s = sort $ nub s
 
-sampleGemStone :: [[Char]] -> ([Char], [[Char]])
-sampleGemStone ls = (head ls, tail ls)
-
 analyzeGemSample :: Char -> [[Char]] -> Int
 analyzeGemSample c ls = length $ filter (\x -> elem c x) ls
 
-countGemStones s ls = go s ls 0
+countGemStones :: [[Char]] -> Int
+countGemStones s = go (head s) (tail s) 0
     where
         go :: [Char] -> [[Char]] -> Int -> Int
         go [] _ acc      = acc
         go (x:xs) ls acc = 
                 go xs ls $! (if analyzeGemSample x ls == length ls then (acc+1) else acc)
-        --go (x:xs) ls acc = if analyzeGemSample x ls == length ls
-        --                   then go xs ls (acc+1)
-        --                   else go xs ls acc
 
 main = do
     testCount <- getLine
     samples <- replicateM (read testCount) getLine
     print $ process samples
+
+
+
+
