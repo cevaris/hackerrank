@@ -43,7 +43,7 @@ import Data.List
 
 
 process s = let (source, samples) = sampleGemStone $ map dedup s
-            in countGemStones source samples 0
+            in countGemStones source samples
 
 dedup :: (Ord a, Eq a) => [a] -> [a]
 dedup s = sort $ nub s
@@ -53,17 +53,15 @@ sampleGemStone ls = (head ls, tail ls)
 
 analyzeGemSample :: Char -> [[Char]] -> Int
 analyzeGemSample c ls = length $ filter (\x -> elem c x) ls
---analyzeGemSample c ls = foldl (\s acc -> if elem c s then 1 else 0) ls 0
---analyzeGemSample c [] n     = n
---analyzeGemSample c (x:xs) n = if elem c x
---                              then analyzeGemSample c xs (n+1)
---                              else analyzeGemSample c xs (n)
 
 -- | trace (show x ++ " " ++ show ls ++ " " ++ show acc) True 
-countGemStones [] _ acc      = acc
-countGemStones (x:xs) ls acc = if analyzeGemSample x ls == length ls
-                               then countGemStones xs ls (acc+1)
-                               else countGemStones xs ls acc
+countGemStones s ls = go s ls 0
+    where
+        go :: [Char] -> [[Char]] -> Int -> Int
+        go [] _ acc      = acc
+        go (x:xs) ls acc = if analyzeGemSample x ls == length ls
+                           then go xs ls (acc+1)
+                           else go xs ls acc
 
 
 
