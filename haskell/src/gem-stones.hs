@@ -36,15 +36,40 @@ Only "a", "b" are the two kind of gem-elements, since these are the only charact
 
 import Control.Monad
 --import Data.Map
-import qualified Data.Map as Map
-import Data.List.Split 
+--import qualified Data.Map as Map
+--import Data.List.Split 
 import Debug.Trace
+import Data.List
 
-process s = map freqList s
+
+process s = let (source, samples) = sampleGemStone $ map dedup s
+            in countGemStones source samples 0
+
+dedup :: (Ord a, Eq a) => [a] -> [a]
+dedup s = sort $ nub s
+
+sampleGemStone :: [[Char]] -> ([Char], [[Char]])
+sampleGemStone ls = (head ls, tail ls)
+
+analyzeGemSample :: Char -> [[Char]] -> Int
+analyzeGemSample c ls = length $ filter (\x -> elem c x) ls
+--analyzeGemSample c ls = foldl (\s acc -> if elem c s then 1 else 0) ls 0
+--analyzeGemSample c [] n     = n
+--analyzeGemSample c (x:xs) n = if elem c x
+--                              then analyzeGemSample c xs (n+1)
+--                              else analyzeGemSample c xs (n)
+
+countGemStones [] _ acc              = acc
+countGemStones samples@(x:xs) ls acc | trace (show x ++ " " ++ show ls ++ " " ++ show acc) True = if analyzeGemSample x ls == length samples
+                                       then countGemStones xs ls (acc+1)
+                                       else countGemStones xs ls acc
+
+
+
 
 --freq s = map (\x -> (head x, length x)) $ group $ sort "happy"
-freqList :: [Char] -> [(Char, Integer)]
-freqList s = Map.toList $ Map.fromListWith (+) [(c, 1) | c <- s]
+--freqList :: [Char] -> [(Char, Integer)]
+--freqList s = Map.toList $ Map.fromListWith (+) [(c, 1) | c <- s]
 
 
 main = do
