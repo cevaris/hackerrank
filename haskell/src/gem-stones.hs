@@ -55,9 +55,11 @@ countGemStones s ls = go s ls 0
     where
         go :: [Char] -> [[Char]] -> Int -> Int
         go [] _ acc      = acc
-        go (x:xs) ls acc = if analyzeGemSample x ls == length ls
-                           then go xs ls (acc+1)
-                           else go xs ls acc
+        go (x:xs) ls acc = 
+                go xs ls $! (if analyzeGemSample x ls == length ls then (acc+1) else acc)
+        --go (x:xs) ls acc = if analyzeGemSample x ls == length ls
+        --                   then go xs ls (acc+1)
+        --                   else go xs ls acc
 
 main = do
     testCount <- getLine
