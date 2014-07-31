@@ -35,9 +35,6 @@ Only "a", "b" are the two kind of gem-elements, since these are the only charact
 -}
 
 import Control.Monad
---import Data.Map
---import qualified Data.Map as Map
---import Data.List.Split 
 import Debug.Trace
 import Data.List
 
@@ -54,7 +51,6 @@ sampleGemStone ls = (head ls, tail ls)
 analyzeGemSample :: Char -> [[Char]] -> Int
 analyzeGemSample c ls = length $ filter (\x -> elem c x) ls
 
--- | trace (show x ++ " " ++ show ls ++ " " ++ show acc) True 
 countGemStones s ls = go s ls 0
     where
         go :: [Char] -> [[Char]] -> Int -> Int
@@ -63,18 +59,7 @@ countGemStones s ls = go s ls 0
                            then go xs ls (acc+1)
                            else go xs ls acc
 
-
-
-
---freq s = map (\x -> (head x, length x)) $ group $ sort "happy"
---freqList :: [Char] -> [(Char, Integer)]
---freqList s = Map.toList $ Map.fromListWith (+) [(c, 1) | c <- s]
-
-
 main = do
     testCount <- getLine
     samples <- replicateM (read testCount) getLine
     print $ process samples
-    --mapM_ print (process samples)
-
-    --mapM_ print ([ process s | s <- samples])
