@@ -59,10 +59,11 @@ analyzeGemSample c ls = length $ filter (\x -> elem c x) ls
 --                              then analyzeGemSample c xs (n+1)
 --                              else analyzeGemSample c xs (n)
 
+-- | trace (show x ++ " " ++ show ls ++ " " ++ show acc) True 
 countGemStones [] _ acc              = acc
-countGemStones samples@(x:xs) ls acc | trace (show x ++ " " ++ show ls ++ " " ++ show acc) True = if analyzeGemSample x ls == length samples
-                                       then countGemStones xs ls (acc+1)
-                                       else countGemStones xs ls acc
+countGemStones (x:xs) ls acc = if analyzeGemSample x ls == length ls
+                               then countGemStones xs ls (acc+1)
+                               else countGemStones xs ls acc
 
 
 
