@@ -68,48 +68,55 @@ aaabbb
 
 -- Sample
 
-data Sample = Sample [Char] [Char]
-              deriving Show
+--data Sample = Sample [Char] [Char]
+--              deriving Show
+
+--isEvenLen :: [Char] -> Bool
+--isEvenLen s = (length s) `mod` 2 == 0
+
+--sample :: [Char] -> Sample
+--sample s =  let x = chunksOf ((length s) `div` 2) s
+--            in  if length x == 2
+--                then (Sample (x !! 0) (x !! 1))
+--                else error "Not valid sample"
+
+--validate s = if isEvenLen s
+--             then processs (sample s)
+--             else -1
+
+--processs (Sample l r) = if isAnagram l r
+--                        then 0
+--                        else calcMinToAna l r 0
+
+---- | trace ("test " ++ xs ++ " " ++ ys ++ " " ++ show acc) True
+--calcMinToAna :: [Char] -> [Char] -> Integer -> Integer
+--calcMinToAna [] [] acc = acc
+--calcMinToAna (x:xs) (y:ys) acc = if x == y
+--                                 then calcMinToAna xs ys acc
+--                                 else calcMinToAna (x:xs) (x:ys) (acc+1)
+
+---- Anagrams
+
+----freq s = map (\x -> (head x, length x)) $ group $ sort "happy"
+--freqList :: [Char] -> [(Char, Integer)]
+--freqList s = toList $ fromListWith (+) [(c, 1) | c <- s]
+
+--isAnagram :: [Char] -> [Char] -> Bool
+--isAnagram a b = (freqList a) == (freqList b)
+
 
 isEvenLen :: [Char] -> Bool
 isEvenLen s = (length s) `mod` 2 == 0
 
-sample :: [Char] -> Sample
-sample s =  let x = chunksOf ((length s) `div` 2) s
-            in  if length x == 2
-                then (Sample (x !! 0) (x !! 1))
-                else error "Not valid sample"
-
-validate s = if isEvenLen s
-             then processs (sample s)
-             else -1
-
-processs (Sample l r) = if isAnagram l r
-                        then 0
-                        else calcMinToAna l r 0
-
--- | trace ("test " ++ xs ++ " " ++ ys ++ " " ++ show acc) True
-calcMinToAna :: [Char] -> [Char] -> Integer -> Integer
-calcMinToAna [] [] acc = acc
-calcMinToAna (x:xs) (y:ys) acc = if x == y
-                                 then calcMinToAna xs ys acc
-                                 else calcMinToAna (x:xs) (x:ys) (acc+1)
-
--- Anagrams
-
---freq s = map (\x -> (head x, length x)) $ group $ sort "happy"
-freqList :: [Char] -> [(Char, Integer)]
-freqList s = toList $ fromListWith (+) [(c, 1) | c <- s]
-
-isAnagram :: [Char] -> [Char] -> Bool
-isAnagram a b = (freqList a) == (freqList b)
-
 
 
 -- Process
+process s = if isEvenLen s
+            then chunksOf ((length s) `div` 2) s
+            else "error"
 
 
 main = do
     testCount <- getLine
     samples <- replicateM (read testCount) getLine
-    mapM_ print ([ validate s | s <- samples])
+    mapM_ print ([ process s | s <- samples])
