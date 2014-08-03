@@ -58,6 +58,7 @@ import Control.Monad
 import Data.Map
 import Data.List.Split 
 import Debug.Trace
+import Data.List
 
 {-
 1
@@ -108,12 +109,18 @@ aaabbb
 isEvenLen :: [Char] -> Bool
 isEvenLen s = (length s) `mod` 2 == 0
 
+splitString :: [a] -> [[a]]
+splitString s = chunksOf ((length s) `div` 2) s
 
+anagramSearch [x:y:nil] = 
 
 -- Process
 process s = if isEvenLen s
-            then chunksOf ((length s) `div` 2) s
-            else "error"
+            then anagramSearch $ splitString s
+            else -1
+
+isAnagram :: (Eq a) => [a] -> [a] -> Bool
+isAnagram l r = length  (nub $ intersect l r) == length l
 
 
 main = do
