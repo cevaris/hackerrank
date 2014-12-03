@@ -41,7 +41,7 @@ Sample Output
 import (
 	"fmt"
 	"os"
-	//"log"
+	"log"
 	// "strings"
 	"bufio"
 	// "io/ioutil"
@@ -49,23 +49,71 @@ import (
 	//"encoding/binary"
 )
 
+/*
+>>> def pascal(n):
+...   line = [1]
+...   for k in range(n):
+...     line.append(line[k] * (n-k) / (k+1))
+...   return line
+*/
+func genPascalRow(n int) ([]int, error) {
+	pascalRow := make([]int, n+1)
+	pascalRow[0] = 1
+	
+	//for k, _ := range pascalRow {
+	for k := 0; k < n; k++ {
+		pascalRow[k+1] = pascalRow[k] * (n - k) / (k+1)
+	}
+	
+	return pascalRow, nil
+}
+
+func firstEven(arr []int) (int) {
+	for i, val := range arr {
+		if val % 2 == 0 {
+			return i
+		}
+	}
+	return -1
+}
+
+func init(){
+	// Enable line numbers in output
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+}
+
+func main() {
+	testCases, err := parseHackerRank()
+	fmt.Println("test Count", testCases, err)
+
+	for _, t  := range testCases {
+		if pascalRow, err := genPascalRow(t+1); err != nil {
+			log.Println(err)
+		} else {
+			fmt.Println(firstEven(pascalRow)+1)
+		}
+	}
+	
+}
+
+
 func StdinReader() (*bufio.Reader) {
 	return bufio.NewReader(os.Stdin)
 }
 
 func parseIntLine() (int, error) {
 	reader := StdinReader()
-	testCountStr, _, err := reader.ReadLine()
+	numStr, _, err := reader.ReadLine()
 	if err != nil {
 		return 0, err
 	}
 
-	testCount, err := strconv.Atoi(string(testCountStr))
+	numVal, err := strconv.Atoi(string(numStr))
 	if err != nil {
 		return 0, err
 	}
 	
-	return testCount, nil
+	return numVal, nil
 }
 
 func parseHackerRank() ([]int, error) {
@@ -73,40 +121,12 @@ func parseHackerRank() ([]int, error) {
 	if err != nil {
 		return nil, err
 	}
-	return make([]int, testCount), nil
-}
-
-func main() {
-	//reader := StdinReader()
-	//reader := bufio.NewReader(os.Stdin)
-	//defer reader.Close()
-
-	testCases, err := parseHackerRank()
-	fmt.Println("test Count", testCases, err)
-
-	// for n := range testCount {
-	// 	fmt.Println(scanner.Text())
-	// }
-
-	// for scanner.Scan() {
-	// 	fmt.Println(scanner.Text())
-	// }
-	
-	// reader, err := bufio.NewReader(os.Stdin)
-	// scanner := bufio.NewScanner(reader)
-	// for scanner.Scan() {
-	// 	fmt.Println(scanner.Text())
-	// }
-
-	// content, err := ioutil.ReadAll(os.Stdin)
-	// if err == nil {
-	// 	log.Fatal(err)
-	// }
-	// lines := strings.Split(string(content), "\n")
-
-	// fmt.Println("Input", lines)
-
-
-	// pascalRow := []int{1}
-	// fmt.Println("Data", pascalRow)
+	// Alloc memory for test cases and fill
+	testCases := make([]int, testCount)
+	for i, _ := range testCases {
+		if testCases[i], err = parseIntLine(); err != nil {
+			log.Println(err)
+		}
+	}
+	return testCases, nil
 }
