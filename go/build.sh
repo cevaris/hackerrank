@@ -7,6 +7,6 @@ export GOBIN=$GOPATH/bin
 DIRS=$(ls src/**/*.go)
 
 for f in $DIRS; do
-    echo building $f...
+    # echo building $f...
     go install $f
 done

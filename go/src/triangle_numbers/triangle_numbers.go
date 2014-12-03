@@ -74,7 +74,6 @@ func parseHackerRank() ([]int, error) {
 		return nil, err
 	}
 	return make([]int, testCount), nil
-	
 }
 
 func main() {
