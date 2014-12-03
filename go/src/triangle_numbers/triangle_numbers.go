@@ -41,7 +41,7 @@ Sample Output
 import (
 	"fmt"
 	"os"
-	"log"
+	//"log"
 	// "strings"
 	"bufio"
 	// "io/ioutil"
@@ -52,32 +52,38 @@ import (
 func StdinReader() (*bufio.Reader) {
 	return bufio.NewReader(os.Stdin)
 }
-// func parseIntLine()
 
-// func parseHackerRank() 
-
-func main() {
+func parseIntLine() (int, error) {
 	reader := StdinReader()
-	//reader := bufio.NewReader(os.Stdin)
-	//defer reader.Close()
-
-	// Initial read of test case count
 	testCountStr, _, err := reader.ReadLine()
 	if err != nil {
-		log.Fatal(err,"Error Reading Test Count")
+		return 0, err
 	}
 
 	testCount, err := strconv.Atoi(string(testCountStr))
-	//testCount, err := binary.ReadVarint(testCountStr)
 	if err != nil {
-		log.Fatal(err,"Error Converting Test Count to Int")
+		return 0, err
 	}
-
 	
+	return testCount, nil
+}
 
-	testCases := make([]int, testCount)
+func parseHackerRank() ([]int, error) {
+	testCount, err := parseIntLine()
+	if err != nil {
+		return nil, err
+	}
+	return make([]int, testCount), nil
+	
+}
 
-	fmt.Println("test Count", testCount, testCases)
+func main() {
+	//reader := StdinReader()
+	//reader := bufio.NewReader(os.Stdin)
+	//defer reader.Close()
+
+	testCases, err := parseHackerRank()
+	fmt.Println("test Count", testCases, err)
 
 	// for n := range testCount {
 	// 	fmt.Println(scanner.Text())
