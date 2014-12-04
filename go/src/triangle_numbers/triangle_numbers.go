@@ -2,21 +2,21 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"log"
-	"bufio"
-	"strconv"
 	"errors"
 )
 
 func genPascalRow(n int) ([]int, error) {
 	pascalRow := make([]int, n+1)
+	//pascalRow := []int{1}
 	pascalRow[0] = 1
 	
 	for k := 0; k < n; k++ {
+		//fmt.Print(n,",", k, ",", pascalRow[k] * (n - k) / (k+1), " ")
 		pascalRow[k+1] = pascalRow[k] * (n - k) / (k+1)
+		//pascalRow = append(pascalRow, pascalRow[k] * (n - k) / (k+1))
 	}
-	
+	//fmt.Println()
 	return pascalRow, nil
 }
 
@@ -34,14 +34,14 @@ func main() {
 	testCases, _ := parseHackerRank()
 
 	for _, t  := range testCases {
-		if pascalRow, err := genPascalRow(t+1); err != nil {
+		if pascalRow, err := genPascalRow(t); err != nil {
 			log.Println(err)
 		} else {
-			// Need to handle the offbyone answer
 			if ret, err := firstEven(pascalRow); err != nil {
-				fmt.Println(ret)
+				fmt.Println(t, pascalRow,ret)
 			} else {
-				fmt.Println(ret+1)
+				// Need to handle the offbyone answer
+				fmt.Println(t, pascalRow, ret+1)
 			}
 		}
 	}
@@ -55,37 +55,23 @@ func init(){
 }
 
 
-func StdinReader() (*bufio.Reader) {
-	return bufio.NewReader(os.Stdin)
-}
-
-func parseIntLine() (int, error) {
-	reader := StdinReader()
-	numStr, _, err := reader.ReadLine()
-	if err != nil {
-		return 0, err
-	}
-
-	numVal, err := strconv.Atoi(string(numStr))
-	if err != nil {
-		return 0, err
-	}
-	
-	return numVal, nil
+func ParseInt(ref *int) error {
+	_, err := fmt.Scanf("%d", ref)
+	return err
 }
 
 func parseHackerRank() ([]int, error) {
-	testCount, err := parseIntLine()
-	if err != nil {
+	var TestCount int
+	if err := ParseInt(&TestCount); err != nil {
 		return nil, err
 	}
 	// Alloc memory for test cases and fill
-	testCases := make([]int, testCount)
-	for i, _ := range testCases {
-		if testCases[i], err = parseIntLine(); err != nil {
+	TestCases := make([]int, TestCount)
+	for i, _ := range TestCases {
+		if err := ParseInt(&TestCases[i]); err != nil {
 			log.Println(err)
 		}
 	}
-	return testCases, nil
+	return TestCases, nil
 }
 
