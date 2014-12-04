@@ -7,6 +7,8 @@ import (
 
 func firstEven(t int) int {
 	switch {
+	case t < 3:
+		return -1
 	case t % 2 != 0:
 		return 2
 	case (t / 2) % 2 == 0:
@@ -17,8 +19,12 @@ func firstEven(t int) int {
 }
 
 func main() {
-	testCases, _ := parseHackerRank()
+	testCases, err := parseHackerRank()
 
+	if err != nil {
+		log.Fatal(err)
+	}
+	
 	for _, t  := range testCases {
 		fmt.Println(firstEven(t))
 	}
@@ -27,13 +33,6 @@ func main() {
 
 //////////////////////////////////////////////////////
 // Reading/Parsing ///////////////////////////////////
-
-
-func init(){
-	// Enable line numbers in output
-	log.SetFlags(log.LstdFlags | log.Lshortfile)
-}
-
 
 func ParseInt(ref *int) error {
 	_, err := fmt.Scanf("%d", ref)
