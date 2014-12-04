@@ -47,6 +47,7 @@ import (
 	// "io/ioutil"
 	"strconv"
 	//"encoding/binary"
+	"errors"
 )
 
 /*
@@ -60,7 +61,6 @@ func genPascalRow(n int) ([]int, error) {
 	pascalRow := make([]int, n+1)
 	pascalRow[0] = 1
 	
-	//for k, _ := range pascalRow {
 	for k := 0; k < n; k++ {
 		pascalRow[k+1] = pascalRow[k] * (n - k) / (k+1)
 	}
@@ -68,13 +68,13 @@ func genPascalRow(n int) ([]int, error) {
 	return pascalRow, nil
 }
 
-func firstEven(arr []int) (int) {
+func firstEven(arr []int) (int, error) {
 	for i, val := range arr {
 		if val % 2 == 0 {
-			return i
+			return i, nil
 		}
 	}
-	return -1
+	return -1, errors.New("Even value not found")
 }
 
 func init(){
@@ -83,14 +83,18 @@ func init(){
 }
 
 func main() {
-	testCases, err := parseHackerRank()
-	fmt.Println("test Count", testCases, err)
+	testCases, _ := parseHackerRank()
+	//fmt.Println("test Count", testCases, err)
 
 	for _, t  := range testCases {
 		if pascalRow, err := genPascalRow(t+1); err != nil {
 			log.Println(err)
 		} else {
-			fmt.Println(firstEven(pascalRow)+1)
+			if ret, err := firstEven(pascalRow); err != nil {
+				fmt.Println(pascalRow, ret)
+			} else {
+				fmt.Println(pascalRow, ret+1)
+			}
 		}
 	}
 	
