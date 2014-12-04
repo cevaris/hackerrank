@@ -5,22 +5,28 @@ import (
 	"log"
 )
 
+func firstEven(t int) int {
+	switch {
+	case t % 2 != 0:
+		return 2
+	case (t / 2) % 2 == 0:
+		return 3
+	default:
+		return 4
+	}
+}
 
 func main() {
 	testCases, _ := parseHackerRank()
 
 	for _, t  := range testCases {
-		if t % 2 == 0 {
-			if (t / 2) % 2 == 0 {
-				fmt.Println(3)
-			} else {
-				fmt.Println(4)
-			}
-		} else {
-			fmt.Println(2)
-		}
+		fmt.Println(firstEven(t))
 	}
 }
+
+
+//////////////////////////////////////////////////////
+// Reading/Parsing ///////////////////////////////////
 
 
 func init(){
