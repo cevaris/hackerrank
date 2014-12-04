@@ -22,7 +22,7 @@ For each test case, print the required sum % (109 + 7)
 Constraints
 
     1 <= T <= 10
-    1 <= n <= 1016
+    1 <= n <= 10^16
 
 Sample Input
 
