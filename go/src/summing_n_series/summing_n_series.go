@@ -9,16 +9,21 @@ import (
 
 const resMod = 10e9 + 7
 
-func Pow(a, b int) int {
-	p := 1
-	for b > 0 {
-		if b&1 != 0 {
-			p *= a
-		}
-		b >>= 1
-		a *= a
-	}
-	return p
+// func Pow(a, b int) int {
+// 	p := 1
+// 	for b > 0 {
+// 		if b&1 != 0 {
+// 			p *= a
+// 		}
+// 		b >>= 1
+// 		a *= a
+// 	}
+// 	return p
+// }
+func Pow(a, b int) *big.Int {
+	x := big.NewInt(int64(a))
+	y := big.NewInt(int64(b))
+	return x.Exp(x, y, nil)
 }
 
 func Sum(arr []int) int {
@@ -46,8 +51,9 @@ func Sum(arr []int) int {
 func CalcSum(n int) *big.Int {
 	res := big.NewInt(0)
 	for i := 1; i <= n; i++ {
-		x := (-Pow(-1+i,2)) + Pow(i,2)
-		res.Add(res, big.NewInt(int64(x)))
+		// x := res.Add(-Pow(-1+i,2)) + Pow(i,2)
+		res.Sub(res,Pow(-1+i,2)).Add(res,Pow(i,2))
+		//res.Add(res, big.NewInt(int64(x)))
 	}
 	return res
 }
