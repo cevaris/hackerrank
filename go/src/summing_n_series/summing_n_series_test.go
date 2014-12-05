@@ -2,71 +2,36 @@ package main
 
 import (
 	"testing"
+	"math/big"
+	"fmt"
 )
 
-
-func IntArray(n int) []int {
-	arr := make([]int, n+1)
-	for i :=0; i < n; i++ {
-		arr[i] = i
+func BenchmarkPow10K(b *testing.B) {
+	test := int(1e4)
+	actual := Pow(test,2)
+	expected := big.NewInt(int64(1e8))
+	if expected.Cmp(actual) != 0 {
+		b.Error("[%v] -> (%v) != (%v)",test, actual, expected)
 	}
-	return arr
 }
 
-func TestNthTerm(t *testing.T) {
+func BenchmarkPow100K(b *testing.B) {
+	test := int(1e5)
+	actual := Pow(test,2)
+	expected := big.NewInt(int64(1e10))
 
-	test     := []int{1,2,10}
-	expected := []int{1,3,19}
+	if expected.Cmp(actual) != 0 {
+		b.Error("[%v] -> (%v) != (%v)",test, actual, expected)
+	}
+}
+
+func BenchmarkPow1e17(b *testing.B) {
+	test := int(1e17)
+	actual := Pow(test,2)
+	expected := new(big.Int)
+	fmt.Sscan("10000000000000000000000000000000000", expected)
 	
-	for i, val := range test {
-		if actual := NthTerm(val); expected[i] != actual {
-			t.Errorf("[%v] -> (%v) != (%v)", val, actual, expected[i])
-		}
-	}
-
-}
-
-
-func TestSum(t *testing.T) {
-
-	test     := []int{1,2,3,4,5}
-	expected := 15
-	actual   := Sum(test)
-	if expected != actual {
-		t.Errorf("(%v) != (%v)", actual, expected)
-	}
-	
-}
-
-func TestSumEmpty(t *testing.T) {
-
-	test     := []int{}
-	expected := 0
-	actual   := Sum(test)
-	if expected != actual {
-		t.Errorf("(%v) != (%v)", actual, expected)
-	}
-	
-}
-
-
-func BenchmarkSum10K(b *testing.B) {
-	arr := IntArray(10000)
-	for i := 0; i < b.N; i++ {
-		Sum(arr)
-	}
-}
-
-func BenchmarkSum100K(b *testing.B) {
-	arr := IntArray(100000)
-	for i := 0; i < b.N; i++ {
-		Sum(arr)
-	}
-}
-
-func BenchmarkSum1M(b *testing.B) {
-	arr := IntArray(1000000)
-	for i := 0; i < b.N; i++ {
-		Sum(arr)
+	if expected.Cmp(actual) != 0 {
+		b.Error("[%v] -> (%v) != (%v)",test, actual, expected)
 	}
 }
