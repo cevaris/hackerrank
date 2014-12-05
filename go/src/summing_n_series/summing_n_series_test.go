@@ -13,6 +13,20 @@ func IntArray(n int) []int {
 	return arr
 }
 
+func TestNthTerm(t *testing.T) {
+
+	test     := []int{1,2,10}
+	expected := []int{1,3,19}
+	
+	for i, val := range test {
+		if actual := NthTerm(val); expected[i] != actual {
+			t.Errorf("[%v] -> (%v) != (%v)", val, actual, expected[i])
+		}
+	}
+
+}
+
+
 func TestSum(t *testing.T) {
 
 	test     := []int{1,2,3,4,5}

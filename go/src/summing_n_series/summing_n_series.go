@@ -5,9 +5,20 @@ import (
 	"log"
 )
 
-func NthTerm(n int) int {
-	return n^2 - (n - 1)^2
+const resMod = 10e9 + 7
+
+func Pow(a, b int) int {
+	p := 1
+	for b > 0 {
+		if b&1 != 0 {
+			p *= a
+		}
+		b >>= 1
+		a *= a
+	}
+	return p
 }
+
 
 func Sum(arr []int) int {
 	v := 0
@@ -15,6 +26,18 @@ func Sum(arr []int) int {
 		v += val
 	}
 	return v
+}
+
+func NthTerm(n int) int {
+	return Pow(n,2) - Pow(n - 1,2)
+}
+
+func GenArray(n int) []int {
+	arr := make([]int, n+1)
+	for i := 1; i <= n; i++ {
+		arr[i] = NthTerm(i)
+	}
+	return arr
 }
 
 func main() {
@@ -25,7 +48,10 @@ func main() {
 	}
 	
 	for _, t  := range testCases {
-		fmt.Println(t)
+		arr := GenArray(t)
+		sum := Sum(arr)
+		res := sum % resMod
+		fmt.Println(res)
 	}
 }
 
