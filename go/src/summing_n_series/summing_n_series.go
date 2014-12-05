@@ -15,9 +15,10 @@ func Pow(a, b int) *big.Int {
 
 func CalcSum(n int) *big.Int {
 	res := big.NewInt(0)
-	for i := 1; i <= n; i++ {
-		res.Sub(res,Pow(i-1,2)).Add(res,Pow(i,2))
-	}
+	//for i := 1; i <= n; i++ {
+	//res.Sub(res,Pow(i-1,2)).Add(res,Pow(i,2))
+	res.Sub(res,Pow(n-1,2)).Add(res,Pow(n,2))
+	//}
 	return res
 }
 

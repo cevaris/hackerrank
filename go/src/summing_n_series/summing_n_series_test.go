@@ -35,3 +35,17 @@ func BenchmarkPow1e17(b *testing.B) {
 		b.Error("[%v] -> (%v) != (%v)",test, actual, expected)
 	}
 }
+
+func BenchmarkCalcSum10k(b *testing.B) {
+	test := int(1e4)
+	for i := 0; i < b.N; i++ {
+		CalcSum(test)
+	}
+}
+
+func BenchmarkCalcSum1M(b *testing.B) {
+	test := int(1e6)
+	for i := 0; i < b.N; i++ {
+		CalcSum(test)
+	}
+}
