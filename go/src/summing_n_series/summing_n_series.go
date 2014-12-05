@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+	//"reflect"
+	"math/big"
 )
 
 const resMod = 10e9 + 7
@@ -19,7 +21,6 @@ func Pow(a, b int) int {
 	return p
 }
 
-
 func Sum(arr []int) int {
 	v := 0
 	for _, val := range arr {
@@ -28,17 +29,29 @@ func Sum(arr []int) int {
 	return v
 }
 
-func NthTerm(n int) int {
-	return Pow(n,2) - Pow(n - 1,2)
+// func NthTerm(n int) *big.Int {
+// 	//return Pow(n,2) - Pow(n - 1,2)
+// 	return big.NewInt(3)
+// }
+
+//// Need to make iterative, cannot store in memory
+// func GenArray(n int) *[]big.Int {
+// 	arr := make([]big.Int, n+1)
+// 	for i := 1; i <= n; i++ {
+// 		arr[i] = NthTerm(i)
+// 	}
+// 	return arr
+// }
+
+func CalcSum(n int) *big.Int {
+	res := big.NewInt(0)
+	for i := 1; i <= n; i++ {
+		x := (-Pow(-1+i,2)) + Pow(i,2)
+		res.Add(res, big.NewInt(int64(x)))
+	}
+	return res
 }
 
-func GenArray(n int) []int {
-	arr := make([]int, n+1)
-	for i := 1; i <= n; i++ {
-		arr[i] = NthTerm(i)
-	}
-	return arr
-}
 
 func main() {
 	testCases, err := ParseHackerRank()
@@ -46,13 +59,18 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	
+
 	for _, t  := range testCases {
-		arr := GenArray(t)
-		sum := Sum(arr)
-		res := sum % resMod
-		fmt.Println(res)
+		//fmt.Println(t,reflect.TypeOf(t),CalcSum(t))
+		fmt.Println(CalcSum(t))
 	}
+	
+	// for _, t  := range testCases {
+	// 	arr := CalcSum(t)
+	// 	sum := Sum(arr)
+	// 	res := sum % resMod
+	// 	fmt.Println(res)
+	// }
 }
 
 
