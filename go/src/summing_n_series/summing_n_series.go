@@ -14,9 +14,6 @@ func Pow(a, b int) *big.Int {
 }
 
 func CalcSum(n int) *big.Int {
-	//res := big.NewInt(0)
-	//res.Sub(res,Pow(-1+n,2)).Add(res,Pow(n,2))	
-	//return res
 	return Pow(n,2)
 }
 
@@ -27,7 +24,7 @@ func main() {
 		log.Fatal(err)
 	}
 	
-	resMod := big.NewInt(int64(10e9 + 7))
+	resMod := big.NewInt(int64(1e9 + 7))
 	for _, t  := range testCases {
 		res := CalcSum(t)
 		fmt.Println(res.Mod(res, resMod))
