@@ -9,6 +9,13 @@ import (
 	"os"
 )
 
+func mean(data []int) float32 { return 0.0 }
+func mode(data []int) float32 { return 0.0 }
+func median(data []int) float32 { return 0.0 }
+func sd(data []int) float32 { return 0.0 }
+func MinConfInterval(data []int) float32 { return 0.0 }
+func MaxConfInterval(data []int) float32 { return 0.0 }
+
 func main() {
 	testCases, err := parseHackerRank()
 
@@ -17,10 +24,6 @@ func main() {
 	}
 
 	log.Println(testCases)
-
-	// for _, t  := range testCases {
-	// 	fmt.Println(firstEven(t))
-	// }
 }
 
 //////////////////////////////////////////////////////
