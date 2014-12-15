@@ -12,7 +12,7 @@ import (
 
 type Stats struct {
 	Mean float64
-	Mode float64
+	Mode int64
 	Median float64
 	StandardDev float64
 	MaxConfInterval float64
@@ -22,7 +22,7 @@ type Stats struct {
 func createStats() *Stats {
 	return &Stats {
 		Mean: 0.0,
-		Mode: 0.0,
+		Mode: 0,
 		Median: 0.0,
 		StandardDev: 0.0,
 		MaxConfInterval: 0.0,
@@ -30,7 +30,18 @@ func createStats() *Stats {
 	}
 }
 
-func (stats *Stats) FindMode(counts map[int]int) float64 {
+func (stats * Stats) Print() string {
+	return fmt.Sprintf(
+		"%.1f\n%.1f\n%d\n%.1f\n%.1f %.1f",
+		stats.Mean,
+		stats.Median,
+		stats.Mode,		
+		stats.StandardDev,
+		stats.MaxConfInterval,
+		stats.MinConfInterval)
+}
+
+func (stats *Stats) FindMode(counts map[int]int) int64 {
 
 	//log.Println("Counts:", counts)
 
@@ -60,11 +71,11 @@ func (stats *Stats) FindMode(counts map[int]int) float64 {
 	// Found at lest one max freq
 	if len(freqs) > 0 {
 		sort.Ints(freqs)
-		return float64(freqs[0])
+		return int64(freqs[0])
 	} else {
 		// Did not find any max freq, all equal, return smallest value
 		sort.Ints(data)
-		return float64(data[0])
+		return int64(data[0])
 	}
 	
 	
@@ -107,7 +118,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Stats: %+v\n", calculate(testCases))
+	//fmt.Printf("Stats: %+v\n", calculate(testCases))
+	var stats *Stats = calculate(testCases)
+	fmt.Println(stats.Print())
 }
 
 
