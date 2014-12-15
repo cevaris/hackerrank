@@ -12,6 +12,10 @@ import (
 	"math"
 )
 
+const (
+	TValue float64 = 1.960
+)
+
 type Stats struct {
 	Mean float64
 	Mode int64
@@ -39,9 +43,31 @@ func (stats * Stats) Print() string {
 		stats.Median,
 		stats.Mode,		
 		stats.StandardDev,
-		stats.MaxConfInterval,
-		stats.MinConfInterval)
+		stats.MinConfInterval,
+		stats.MaxConfInterval,)
 }
+
+func (stats *Stats) FindStandardDev(data []int, u float64) float64 {
+	var subMeanSum float64 = 0.0
+	for _,v := range data {
+		val := float64(v)
+		res := val - u
+		resSqrd := res*res
+		subMeanSum += resSqrd
+	}
+	return math.Sqrt(subMeanSum/float64(len(data)))
+}
+
+func (stats *Stats) FindConfIntervals(data []int) (*Stats) {
+	var sampleSize float64 = float64(len(data))
+	var sd float64 = stats.StandardDev
+	var mean float64 = stats.Mean
+	var confInterval float64 = TValue * (sd / math.Sqrt(sampleSize))
+	stats.MinConfInterval = mean - confInterval
+	stats.MaxConfInterval = mean + confInterval
+	return stats
+}
+
 func (stats *Stats) FindMedian(data []int) float64 {
 	var length int = len(data)
 
@@ -52,6 +78,7 @@ func (stats *Stats) FindMedian(data []int) float64 {
 	}
 	
 }
+
 func (stats *Stats) FindMode(counts map[int]int) (int64, error) {
 
 	//log.Println("Counts:", counts)
@@ -93,15 +120,13 @@ func (stats *Stats) FindMode(counts map[int]int) (int64, error) {
 func calculate(data []int) *Stats {
 
 	var stats *Stats = createStats()
-	counts := make(map[int]int)
-	subMeanData := make([]float64, len(data))
-	
 	if len(data) == 0 {
 		return stats
 	}
 
 	var lengthf float64 = float64(len(data))
 	var sum float64  = 0.0
+	var counts map[int]int = make(map[int]int)
 
 	// Sort data
 	sort.Ints(data)
@@ -121,23 +146,13 @@ func calculate(data []int) *Stats {
 	
 	stats.Mean = sum / lengthf
 	stats.Median = stats.FindMedian(data)
+	stats.StandardDev = stats.FindStandardDev(data,stats.Mean)
 	if smode, err := stats.FindMode(counts); err != nil {
 		stats.Mode = int64(data[0])
 	} else {
 		stats.Mode = smode
 	}
-
-	
-	var subMeanSum float64 = 0.0
-	for _,v := range data {
-		val := float64(v)
-		res := val - stats.Mean
-		res2 := res*res
-		subMeanSum += res2		
-	}
-	stats.StandardDev = math.Sqrt(subMeanSum/lengthf)
-
-	log.Println(subMeanData)
+ stats.FindConfIntervals(data)
 	
 	return stats
 }
