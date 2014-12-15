@@ -8,6 +8,7 @@ import (
 	"bufio"
 	"os"
 	"sort"
+	"errors"
 )
 
 type Stats struct {
@@ -50,7 +51,7 @@ func (stats *Stats) FindMedian(data []int) float64 {
 	}
 	
 }
-func (stats *Stats) FindMode(counts map[int]int) int64 {
+func (stats *Stats) FindMode(counts map[int]int) (int64, error) {
 
 	//log.Println("Counts:", counts)
 
@@ -77,14 +78,12 @@ func (stats *Stats) FindMode(counts map[int]int) int64 {
 		//log.Println(key, val, "MaxFreq:",maxFreq,"Freqs:",freqs)		
 	}
 
-	// Found at lest one max freq
 	if len(freqs) > 0 {
+		// Found at lest one max freq
 		sort.Ints(freqs)
-		return int64(freqs[0])
+		return int64(freqs[0]), nil
 	} else {
-		// Did not find any max freq, all equal, return smallest value
-		sort.Ints(data)
-		return int64(data[0])
+		return -1, errors.New("No max freq found, all equal")
 	}
 	
 	
@@ -118,10 +117,13 @@ func calculate(data []int) *Stats {
 		
 	}
 	
-
 	stats.Mean = sum / lengthf
-	stats.Mode = stats.FindMode(counts)
 	stats.Median = stats.FindMedian(data)
+	if smode, err := stats.FindMode(counts); err != nil {
+		stats.Mode = int64(data[0])
+	} else {
+		stats.Mode = smode
+	}
 	return stats
 }
 

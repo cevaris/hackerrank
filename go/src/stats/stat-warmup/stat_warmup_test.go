@@ -6,7 +6,7 @@ import (
 
 func TestModeFinder(t *testing.T) {
 	var s *Stats = createStats()
-	var expected, actual int64
+	var expected int64
 	var d map[int]int
 
 	testCondition :=  func(label string, actual, expected int64) {
@@ -16,19 +16,28 @@ func TestModeFinder(t *testing.T) {
 	}
 
 	d = map[int]int{1:1,2:1,3:1,4:1}	
-	expected = 1
-	actual = s.FindMode(d)
-	testCondition("All equal freq",actual, expected)
+	if _, err := s.FindMode(d); err != nil {
+		t.Error("Expected error not thrown")
+	}
 
 	d = map[int]int{1:1,2:4,3:1,4:1}	
 	expected = 2
-	actual = s.FindMode(d)
-	testCondition("Single max freq",actual, expected)
+	actual1,err1 := s.FindMode(d)
+	if err1 == nil {
+		testCondition("Single max freq",actual1, expected)
+	} else {
+		t.Error("Non-Expected error thrown")
+	}
 
 	d = map[int]int{1:1,2:1,3:2,4:2}	
 	expected = 3
-	actual = s.FindMode(d)
-	testCondition("Competing max freq",actual, expected)
+	actual2,err2 := s.FindMode(d)
+	if err2 == nil {
+		testCondition("Multiple max freq",actual2, expected)
+	} else {
+		t.Error("Non-Expected error thrown")
+	}
+	
 }
 
 
