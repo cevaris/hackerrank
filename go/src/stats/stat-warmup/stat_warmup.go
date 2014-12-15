@@ -9,6 +9,7 @@ import (
 	"os"
 	"sort"
 	"errors"
+	"math"
 )
 
 type Stats struct {
@@ -93,6 +94,7 @@ func calculate(data []int) *Stats {
 
 	var stats *Stats = createStats()
 	counts := make(map[int]int)
+	subMeanData := make([]float64, len(data))
 	
 	if len(data) == 0 {
 		return stats
@@ -103,11 +105,11 @@ func calculate(data []int) *Stats {
 
 	// Sort data
 	sort.Ints(data)
-	
+
+	// Initial sum and counts
 	for _,v := range data {
 		val := float64(v)
 		sum += val
-
 		// Record counts
 		if foundVal, ok := counts[v]; ok {
 			counts[v] = foundVal + 1 //1+ Occurs
@@ -124,6 +126,19 @@ func calculate(data []int) *Stats {
 	} else {
 		stats.Mode = smode
 	}
+
+	
+	var subMeanSum float64 = 0.0
+	for _,v := range data {
+		val := float64(v)
+		res := val - stats.Mean
+		res2 := res*res
+		subMeanSum += res2		
+	}
+	stats.StandardDev = math.Sqrt(subMeanSum/lengthf)
+
+	log.Println(subMeanData)
+	
 	return stats
 }
 
