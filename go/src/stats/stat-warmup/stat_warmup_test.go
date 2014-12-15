@@ -69,7 +69,7 @@ func TestMedianFinder(t *testing.T) {
 	testCondition("Even length",actual, expected)
 
 	d = []int{1,2,3,4,5}	
-	expected = 1.5
+	expected = 3
 	actual = s.FindMedian(d)
 	testCondition("Odd length",actual, expected)
 	

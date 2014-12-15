@@ -36,15 +36,6 @@ func createStats() *Stats {
 	}
 }
 
-func truncateFloat(val float64) float64 {
-	strVal := fmt.Sprintf("%.1f",val)
-	if res, err := strconv.ParseFloat(strVal, 64); err != nil{
-		log.Fatal("Invalid Float Format",val)
-		return 0.0
-	} else {
-		return res
-	}
-}
 
 func (stats * Stats) Print() string {
 	return fmt.Sprintf(
@@ -84,7 +75,7 @@ func (stats *Stats) FindMedian(data []int) float64 {
 	if length % 2 == 0 {
 		return float64(data[length/2-1]+data[length/2]) / 2.0		
 	} else {
-		return float64(data[length/2]) / 2.0
+		return float64(data[length/2])
 	}
 	
 }
@@ -111,8 +102,7 @@ func (stats *Stats) FindMode(counts map[int]int) (int64, error) {
 			freqs = append(freqs, key)
 		}
 
-		data = append(data, key)
-				
+		data = append(data, key)				
 	}
 
 	if len(freqs) > 0 {
@@ -122,7 +112,6 @@ func (stats *Stats) FindMode(counts map[int]int) (int64, error) {
 	} else {
 		return -1, errors.New("No max freq found, all equal")
 	}
-	
 	
 }
 
@@ -152,7 +141,7 @@ func calculate(data []int) *Stats {
 			counts[v] = 1 // First Occurs
 		}
 	}
-	
+
 	stats.Mean = sum / lengthf
 	stats.Median = stats.FindMedian(data)
 	stats.StandardDev = stats.FindStandardDev(data,stats.Mean)
