@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	TValue float64 = 1.960
+	TValue float64 = 1.96
 )
 
 type Stats struct {
@@ -36,6 +36,16 @@ func createStats() *Stats {
 	}
 }
 
+func truncateFloat(val float64) float64 {
+	strVal := fmt.Sprintf("%.1f",val)
+	if res, err := strconv.ParseFloat(strVal, 64); err != nil{
+		log.Fatal("Invalid Float Format",val)
+		return 0.0
+	} else {
+		return res
+	}
+}
+
 func (stats * Stats) Print() string {
 	return fmt.Sprintf(
 		"%.1f\n%.1f\n%d\n%.1f\n%.1f %.1f",
@@ -55,7 +65,8 @@ func (stats *Stats) FindStandardDev(data []int, u float64) float64 {
 		resSqrd := res*res
 		subMeanSum += resSqrd
 	}
-	return math.Sqrt(subMeanSum/float64(len(data)))
+	var sd float64 = math.Sqrt(subMeanSum/float64(len(data)))
+	return truncateFloat(sd)
 }
 
 func (stats *Stats) FindConfIntervals(data []int) (*Stats) {
@@ -63,8 +74,8 @@ func (stats *Stats) FindConfIntervals(data []int) (*Stats) {
 	var sd float64 = stats.StandardDev
 	var mean float64 = stats.Mean
 	var confInterval float64 = TValue * (sd / math.Sqrt(sampleSize))
-	stats.MinConfInterval = mean - confInterval
-	stats.MaxConfInterval = mean + confInterval
+	stats.MinConfInterval = truncateFloat(mean - confInterval)
+	stats.MaxConfInterval = truncateFloat(mean + confInterval)
 	return stats
 }
 
@@ -72,9 +83,9 @@ func (stats *Stats) FindMedian(data []int) float64 {
 	var length int = len(data)
 
 	if length % 2 == 0 {
-		return float64(data[length/2-1]+data[length/2]) / 2.0		
+		return truncateFloat(float64(data[length/2-1]+data[length/2]) / 2.0)
 	} else {
-		return float64(data[length/2]) / 2.0
+		return truncateFloat(float64(data[length/2]) / 2.0)
 	}
 	
 }
@@ -103,7 +114,6 @@ func (stats *Stats) FindMode(counts map[int]int) (int64, error) {
 
 		data = append(data, key)
 				
-		//log.Println(key, val, "MaxFreq:",maxFreq,"Freqs:",freqs)		
 	}
 
 	if len(freqs) > 0 {
@@ -135,24 +145,24 @@ func calculate(data []int) *Stats {
 	for _,v := range data {
 		val := float64(v)
 		sum += val
+
 		// Record counts
 		if foundVal, ok := counts[v]; ok {
 			counts[v] = foundVal + 1 //1+ Occurs
 		} else {
 			counts[v] = 1 // First Occurs
 		}
-		
 	}
 	
-	stats.Mean = sum / lengthf
+	stats.Mean = truncateFloat(sum / lengthf)
 	stats.Median = stats.FindMedian(data)
 	stats.StandardDev = stats.FindStandardDev(data,stats.Mean)
+	stats.FindConfIntervals(data)
 	if smode, err := stats.FindMode(counts); err != nil {
 		stats.Mode = int64(data[0])
 	} else {
 		stats.Mode = smode
 	}
- stats.FindConfIntervals(data)
 	
 	return stats
 }

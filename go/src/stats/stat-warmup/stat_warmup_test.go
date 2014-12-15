@@ -40,6 +40,17 @@ func TestModeFinder(t *testing.T) {
 	
 }
 
+func TestTruncateFloat(t *testing.T) {
+	var test, actual,expected float64
+
+	test = 1.12345678
+	expected = 1.1
+	actual = truncateFloat(test)
+	if actual != expected {
+		t.Error("Expected", expected, "Actual", actual)
+	}		
+	
+}
 
 func TestMedianFinder(t *testing.T) {
 	var s *Stats = createStats()
