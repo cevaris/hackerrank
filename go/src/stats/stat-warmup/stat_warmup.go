@@ -40,7 +40,16 @@ func (stats * Stats) Print() string {
 		stats.MaxConfInterval,
 		stats.MinConfInterval)
 }
+func (stats *Stats) FindMedian(data []int) float64 {
+	var length int = len(data)
 
+	if length % 2 == 0 {
+		return float64(data[length/2-1]+data[length/2]) / 2.0		
+	} else {
+		return float64(data[length/2]) / 2.0
+	}
+	
+}
 func (stats *Stats) FindMode(counts map[int]int) int64 {
 
 	//log.Println("Counts:", counts)
@@ -92,6 +101,9 @@ func calculate(data []int) *Stats {
 
 	var lengthf float64 = float64(len(data))
 	var sum float64  = 0.0
+
+	// Sort data
+	sort.Ints(data)
 	
 	for _,v := range data {
 		val := float64(v)
@@ -109,6 +121,7 @@ func calculate(data []int) *Stats {
 
 	stats.Mean = sum / lengthf
 	stats.Mode = stats.FindMode(counts)
+	stats.Median = stats.FindMedian(data)
 	return stats
 }
 

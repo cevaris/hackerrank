@@ -30,3 +30,28 @@ func TestModeFinder(t *testing.T) {
 	actual = s.FindMode(d)
 	testCondition("Competing max freq",actual, expected)
 }
+
+
+func TestMedianFinder(t *testing.T) {
+	var s *Stats = createStats()
+	var expected, actual float64
+	var d []int
+
+	testCondition :=  func(label string, actual, expected float64) {
+		if actual != expected {
+			t.Error(label,"Expected", expected, "Actual", actual)
+		}		
+	}
+	
+	d = []int{1,2,3,4}	
+	expected = 2.5
+	actual = s.FindMedian(d)
+	testCondition("Even length",actual, expected)
+
+	d = []int{1,2,3,4,5}	
+	expected = 1.5
+	actual = s.FindMedian(d)
+	testCondition("Odd length",actual, expected)
+	
+
+}
