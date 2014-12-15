@@ -65,8 +65,7 @@ func (stats *Stats) FindStandardDev(data []int, u float64) float64 {
 		resSqrd := res*res
 		subMeanSum += resSqrd
 	}
-	var sd float64 = math.Sqrt(subMeanSum/float64(len(data)))
-	return truncateFloat(sd)
+	return math.Sqrt(subMeanSum/float64(len(data)))
 }
 
 func (stats *Stats) FindConfIntervals(data []int) (*Stats) {
@@ -74,8 +73,8 @@ func (stats *Stats) FindConfIntervals(data []int) (*Stats) {
 	var sd float64 = stats.StandardDev
 	var mean float64 = stats.Mean
 	var confInterval float64 = TValue * (sd / math.Sqrt(sampleSize))
-	stats.MinConfInterval = truncateFloat(mean - confInterval)
-	stats.MaxConfInterval = truncateFloat(mean + confInterval)
+	stats.MinConfInterval = mean - confInterval
+	stats.MaxConfInterval = mean + confInterval
 	return stats
 }
 
@@ -83,9 +82,9 @@ func (stats *Stats) FindMedian(data []int) float64 {
 	var length int = len(data)
 
 	if length % 2 == 0 {
-		return truncateFloat(float64(data[length/2-1]+data[length/2]) / 2.0)
+		return float64(data[length/2-1]+data[length/2]) / 2.0		
 	} else {
-		return truncateFloat(float64(data[length/2]) / 2.0)
+		return float64(data[length/2]) / 2.0
 	}
 	
 }
@@ -154,7 +153,7 @@ func calculate(data []int) *Stats {
 		}
 	}
 	
-	stats.Mean = truncateFloat(sum / lengthf)
+	stats.Mean = sum / lengthf
 	stats.Median = stats.FindMedian(data)
 	stats.StandardDev = stats.FindStandardDev(data,stats.Mean)
 	stats.FindConfIntervals(data)
