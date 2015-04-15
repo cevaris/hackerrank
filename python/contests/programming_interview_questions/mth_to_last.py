@@ -98,10 +98,10 @@ class DoubleLinkList(object):
         return result
 
 
-import fileinput
+# import fileinput
 
-stdin = fileinput.input()
-index = int(stdin.next())
-data = stdin.next().split(' ')
-ls = DoubleLinkList(data)
-print ls.mth_to_last(index)
+# stdin = fileinput.input()
+# index = int(stdin.next())
+# data = stdin.next().split(' ')
+# ls = DoubleLinkList(data)
+# print ls.mth_to_last(index)
