@@ -58,7 +58,3 @@ main = do
     testCount <- getLine
     samples <- replicateM (read testCount) getLine
     print $ process samples
-
-
-
-
