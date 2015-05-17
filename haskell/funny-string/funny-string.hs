@@ -13,22 +13,21 @@ printFunny NotFunny = "Not Funny"
 convert :: String -> [Int]
 convert s = map ord s
 
-pair :: [a] -> [(a, a)] -> [(a, a)]
-pair [] acc       = acc
-pair (_:[]) acc   = acc
-pair (x:y:ls) acc = pair ([y] ++ ls) (acc ++ [(x, y)])
+helper :: (Num a, Eq a) => [Bool] -> [a] -> [a] -> [Bool]
+helper acc [] []             = acc
+helper acc (_:[]) (_:[])     = acc
+helper acc (a:b:cs) (x:y:zs) = helper (acc ++ [constraint ((a,b), (x,y))]) cs zs
 
-constraint :: ((Int, Int), (Int, Int)) -> Bool
+constraint :: (Num a, Eq a) => ((a, a), (a, a)) -> Bool
 constraint ((x,y), (j,k)) = (abs (x - y) == abs (j - k))
 
 solve :: String -> FunnyResult
-solve s = let x =  convert s
-              y = zip (pair x []) (pair (reverse x) [])
-              z = False `elem` (map constraint y)
-              r = case z of
-                    True  -> NotFunny
-                    False -> Funny
-          in r
+solve s = result where
+    a      = convert s
+    b      = reverse a
+    result = case False `elem` (helper [] a b) of
+               True  -> NotFunny
+               False -> Funny
 
 main :: IO ()
 main = do
